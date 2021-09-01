@@ -4,20 +4,13 @@ int main() {
     const int max_buffer = 128;
     char buffer[max_buffer];
     FILE * status;
-    status = popen("git stash list", "r");
+    status = popen("git stash list 2> /dev/null", "r");
     int i = 0;
-    while (fgets(buffer, max_buffer, status)) {
-        fputs(buffer, status);
-        i++;
-    }
+    while (fgets(buffer, max_buffer, status)) i++;
     if (0 < i) cout << "\033[35mStashes: " << i;
-    status = popen("git log -1 --pretty=format:'%s'", "r");
-    cout << "\033[90m\n";
-    while (fgets(buffer, max_buffer, status)) {
-        fputs(buffer, status);
-        cout << buffer << '\n';
-    }
-    status = popen("git status -s", "r");
+    status = popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r");
+    cout << "\033[90m\n" << fgets(buffer, max_buffer, status) << '\n';
+    status = popen("git status -s 2> /dev/null", "r");
     while (fgets(buffer, max_buffer, status)) {
         fputs(buffer, status);
         switch(buffer[0]) {
@@ -31,9 +24,6 @@ int main() {
                         break;
                     case 'D':
                         cout << "\033[31m";
-                        break;
-                    default:
-                        return 0;
                 }
                 break;
             case 'A':
@@ -52,9 +42,6 @@ int main() {
                         break;
                     case 'U':
                         cout << "\033[37;42m";
-                        break;
-                    default:
-                        return 0;
                 }
                 break;
             case 'D':
@@ -67,9 +54,6 @@ int main() {
                         break;
                     case 'U':
                         cout << "\033[37;41m";
-                        break;
-                    default:
-                        return 0;
                 }
                 break;
             case 'M':
@@ -82,9 +66,6 @@ int main() {
                         break;
                     case 'M':
                         cout << "\033[93m";
-                        break;
-                    default:
-                        return 0;
                 }
                 break;
             case 'U':
@@ -97,9 +78,6 @@ int main() {
                         break;
                     case 'U':
                         cout << "\033[30;43m";
-                        break;
-                    default:
-                        return 0;
                 }
                 break;
             case 'R':
@@ -112,13 +90,7 @@ int main() {
                         break;
                     case 'M':
                         cout << "\033[38;5;93m";
-                        break;
-                    default:
-                        return 0;
                 }
-                break;
-            default:
-                return 0;
         }
         i = 3;
         while (buffer[i] != '\n') {
