@@ -32,7 +32,7 @@ int main() {
                         cout << "\033[34m";
                         break;
                     case 'A':
-                        cout << "\033[30;42m";
+                        cout << "\033[37;44m";
                         break;
                     case 'D':
                         cout << "\033[96m";
@@ -41,7 +41,7 @@ int main() {
                         cout << "\033[94m";
                         break;
                     case 'U':
-                        cout << "\033[37;42m";
+                        cout << "\033[30;44m";
                 }
                 break;
             case 'D':
@@ -50,10 +50,10 @@ int main() {
                         cout << "\033[91m";
                         break;
                     case 'D':
-                        cout << "\033[30;41m";
+                        cout << "\033[37;41m";
                         break;
                     case 'U':
-                        cout << "\033[37;41m";
+                        cout << "\033[30;41m";
                 }
                 break;
             case 'M':
@@ -71,10 +71,10 @@ int main() {
             case 'U':
                 switch(buffer[1]) {
                     case 'A':
-                        cout << "\033[96;42m";
+                        cout << "\033[33;44m";
                         break;
                     case 'D':
-                        cout << "\e[96;41m";
+                        cout << "\033[33;41m";
                         break;
                     case 'U':
                         cout << "\033[30;43m";
