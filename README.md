@@ -1,11 +1,23 @@
 # GitPrompt
+Fun Fact: I started this project because I was too lazy to type git status.
+
+I originally wrote GitPrompt in Bash. These were literally the first lines of code I wrote.
+```bash
+gitStatus() {
+  echo -e "\e[31m$(git status --short 2> /dev/null | sed ':a;N;$!ba;s/\n/ /g')"
+}
+```
 
 # Table of Contents
 * [Install](#install)
+  * [Update](#update)
+  * [Nerd Font](#nerd-font)
 * [Color Codes ](#color-codes)
     * [Normal](#normal)
     * [Merge Conflicts](#merge-conflicts)
-* [Update](#update)
+* [Examples](#examples)
+  * [Merge Conflict](#merge-conflict)
+  * [Normal Usage](#normal-usage)
 
 # Install
 ```bash
@@ -18,6 +30,25 @@ Then put "\$(~/Git)" anywhere inside of PS1.
 ```bash
 export PS1="\u@\h \$(~/Git)\[\e[00m\]\n\W\\$ "
 ```
+## Update
+```bash
+cd GitPrompt
+git pull
+g++ -O3 Git.cpp -o Git; mv Git ~
+```
+
+## Nerd Font
+```bash
+git clone https://github.com/sgolovine/nerdfont-patcher.git
+cd nerdfont-patcher
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:fontforge/fontforge
+sudo apt-get update -y
+sudo apt-get install -y fontforge
+fontforge -script font-patcher /PATH/TO/YOUR/FAVORITE/FONT/FontName.ttf -c
+```
+Install your new font and change your terminal font to the new font.
+
 
 # Color Codes
 ## Normal
@@ -47,9 +78,8 @@ export PS1="\u@\h \$(~/Git)\[\e[00m\]\n\W\\$ "
 | Deleted File(Them) | ![](https://i.imgur.com/7gojtXH.png) |
 | Deleted File(Both) | ![](https://i.imgur.com/8gEo6RW.png) |
 
-# Update
-```bash
-cd GitPrompt
-git pull
-g++ -O3 Git.cpp -o Git; mv Git ~
-```
+# Examples
+## Merge Conflict
+![](https://i.imgur.com/1fdC6Rz.png)
+## Normal Usage
+![](https://i.imgur.com/vx2bjOZ.png)
