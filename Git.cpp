@@ -6,7 +6,7 @@ void print(char* array, int i);
 int main() {
     const int max_buffer = 128;
     char buffer[max_buffer];
-    if (fgets(buffer, max_buffer, popen("git branch --show-current 2> /dev/null", "r"))) {
+    if (fgets(buffer, max_buffer, popen("git rev-parse --git-dir 2> /dev/null", "r"))) {
         FILE * status;
         status = popen("git stash list", "r");
         int i = 0;
@@ -17,17 +17,15 @@ int main() {
         status = popen("git status -s", "r");
         if (fgets(buffer, max_buffer, status)) {
             cout << "\n\033";
-            fputs(buffer, status);
             color(buffer);
+            while (fgets(buffer, max_buffer, status)) color(buffer);
         }
-        while (fgets(buffer, max_buffer, status)) {
-            fputs(buffer, status);
-            color(buffer);
+        if (fgets(buffer, max_buffer, popen("git branch --show-current", "r"))) {
+            cout << "\n\033[30;41m";
+            print(buffer, 0);
+            cout << "\033[31;44m";
         }
-        fgets(buffer, max_buffer, popen("git branch --show-current", "r"));
-        cout << "\n\033[30;41m";
-        print(buffer, 0);
-        cout << "\033[31;44m";
+        else cout << "\n\033[30;42mRebasing\033[32;44m\033[0m";
         pclose(status);
     }
     else cout << "\n\033";
