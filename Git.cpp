@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 void color(char* buffer);
-void print(char* array, int i);
+void print(char* array, int i, char a);
 
 int main() {
     const int max_buffer = 128;
@@ -20,12 +20,23 @@ int main() {
             color(buffer);
             while (fgets(buffer, max_buffer, status)) color(buffer);
         }
+        sprintf(buffer, "cat %s 2> /dev/null", "\"`git rev-parse --show-toplevel`/.git/MERGE_MSG\"");
+        if (fgets(buffer, max_buffer, popen(buffer, "r"))) {
+            cout << "\n\033[30;42mMerging\033[32;41m\033[30;41m";
+            print(buffer, 14, '\'');
+            cout << "\033[0;31m";
+        }
         if (fgets(buffer, max_buffer, popen("git branch --show-current", "r"))) {
             cout << "\n\033[30;41m";
-            print(buffer, 0);
+            print(buffer, 0, '\n');
             cout << "\033[31;44m";
         }
-        else cout << "\n\033[30;42mRebasing\033[32;44m\033[0m";
+        else {
+            fgets(buffer, max_buffer, popen("git branch -l", "r"));
+            cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
+            print(buffer, 23, ')');
+            cout << "\033[31;44m";
+        }
         pclose(status);
     }
     else cout << "\n\033";
@@ -112,12 +123,12 @@ void color(char* buffer) {
                     cout << "\033[38;5;93m";
             }
     }
-    print(buffer, 3);
+    print(buffer, 3, '\n');
     cout << "\033[00m ";
 }
 
-void print(char* array, int i) {
-    while (array[i] != '\n') {
+void print(char* array, int i, char a) {
+    while (array[i] != a) {
         cout << array[i];
         i++;
     }
