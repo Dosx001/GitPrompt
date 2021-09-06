@@ -1,55 +1,56 @@
 #include <iostream>
 using namespace std;
-void color(char* buffer);
-void print(char* array, int i, char a);
+void color(char* stream);
+void print(char* stream, int i, char a);
+bool merge(char* stream);
 
 int main() {
-    const int max_buffer = 128;
-    char buffer[max_buffer];
-    if (fgets(buffer, max_buffer, popen("git rev-parse --git-dir 2> /dev/null", "r"))) {
-        FILE * status;
-        status = popen("git stash list", "r");
+    const int max = 128;
+    char stream[max];
+    if (fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r"))) {
+        FILE* fp;
+        fp = popen("git stash list", "r");
         int i = 0;
-        while (fgets(buffer, max_buffer, status)) i++;
+        while (fgets(stream, max, fp)) i++;
         if (0 < i) cout << "\033[35mStashes: " << i;
-        if (fgets(buffer, max_buffer, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
-            cout << "\033[90m\n" << buffer;
-        status = popen("git status -s", "r");
-        if (fgets(buffer, max_buffer, status)) {
+        if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
+            cout << "\033[90m\n" << stream;
+        fp = popen("git status -s", "r");
+        if (fgets(stream, max, fp)) {
             cout << "\n\033";
-            color(buffer);
-            while (fgets(buffer, max_buffer, status)) color(buffer);
+            color(stream);
+            while (fgets(stream, max, fp)) color(stream);
         }
-        sprintf(buffer, "cat %s 2> /dev/null", "\"`git rev-parse --show-toplevel`/.git/MERGE_MSG\"");
-        if (fgets(buffer, max_buffer, popen(buffer, "r"))) {
+        if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel`/.git/MERGE_MSG 2> /dev/null", "r"))
+            && merge(stream)) {
             cout << "\n\033[30;42mMerging\033[32;41m\033[30;41m";
-            print(buffer, 14, '\'');
+            print(stream, 14, '\'');
             cout << "\033[0;31m";
         }
-        if (fgets(buffer, max_buffer, popen("git branch --show-current", "r"))) {
+        if (fgets(stream, max, popen("git branch --show-current", "r"))) {
             cout << "\n\033[30;41m";
-            print(buffer, 0, '\n');
+            print(stream, 0, '\n');
             cout << "\033[31;44m";
         }
         else {
-            fgets(buffer, max_buffer, popen("git branch -l", "r"));
+            fgets(stream, max, popen("git branch -l", "r"));
             cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
-            print(buffer, 23, ')');
+            print(stream, 23, ')');
             cout << "\033[31;44m";
         }
-        pclose(status);
+        pclose(fp);
     }
     else cout << "\n\033";
     return 0;
 }
 
-void color(char* buffer) {
-    switch(buffer[0]) {
+void color(char* stream) {
+    switch(stream[0]) {
         case '?':
             cout << "\033[37m";
             break;
         case ' ':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case 'M':
                     cout << "\033[33m";
                     break;
@@ -58,7 +59,7 @@ void color(char* buffer) {
             }
             break;
         case 'A':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case ' ':
                     cout << "\033[34m";
                     break;
@@ -76,7 +77,7 @@ void color(char* buffer) {
             }
             break;
         case 'D':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case ' ':
                     cout << "\033[91m";
                     break;
@@ -88,7 +89,7 @@ void color(char* buffer) {
             }
             break;
         case 'M':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case ' ':
                     cout << "\033[32m";
                     break;
@@ -100,7 +101,7 @@ void color(char* buffer) {
             }
             break;
         case 'U':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case 'A':
                     cout << "\033[33;44m";
                     break;
@@ -112,7 +113,7 @@ void color(char* buffer) {
             }
             break;
         case 'R':
-            switch(buffer[1]) {
+            switch(stream[1]) {
                 case ' ':
                     cout << "\033[35m";
                     break;
@@ -123,13 +124,19 @@ void color(char* buffer) {
                     cout << "\033[38;5;93m";
             }
     }
-    print(buffer, 3, '\n');
+    print(stream, 3, '\n');
     cout << "\033[00m ";
 }
 
-void print(char* array, int i, char a) {
-    while (array[i] != a) {
-        cout << array[i];
+void print(char* stream, int i, char a) {
+    while (stream[i] != a) {
+        cout << stream[i];
         i++;
     }
+}
+
+bool merge(char* stream) {
+    char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
+    for (int i = 0; i < 15; i += 3) if (stream[i] != check[i]) return false;
+    return true;
 }
