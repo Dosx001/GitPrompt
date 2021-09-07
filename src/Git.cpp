@@ -16,6 +16,15 @@ void Git::log() {
         std::cout << "\033[90m\n" << stream;
 }
 
+void Git::status() {
+    fp = popen("git status -s", "r");
+    if (fgets(stream, max, fp)) {
+        std::cout << "\n\033";
+        color(stream);
+        while (fgets(stream, max, fp)) color(stream);
+    }
+}
+
 void Git::merge() {
     if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel`/.git/MERGE_MSG 2> /dev/null", "r"))) {
         char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
@@ -23,15 +32,6 @@ void Git::merge() {
         std::cout << "\n\033[30;42mMerging\033[32;41m\033[30;41m";
         print(stream, 14, '\'');
         std::cout << "\033[0;31m";
-    }
-}
-
-void Git::status() {
-    fp = popen("git status -s", "r");
-    if (fgets(stream, max, fp)) {
-        std::cout << "\n\033";
-        color(stream);
-        while (fgets(stream, max, fp)) color(stream);
     }
 }
 

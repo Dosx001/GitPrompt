@@ -9,8 +9,8 @@ class Git {
         bool start();
         void stash();
         void log();
-        void merge();
         void status();
+        void merge();
         void branch();
     private:
         void color(char* stream);
