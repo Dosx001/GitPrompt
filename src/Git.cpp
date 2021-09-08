@@ -18,9 +18,10 @@ void Git::stash() {
 
 void Git::log() {
     char stream[max];
-    if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
+    if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r"))) {
         while (gates[0]);
         std::cout << "\033[90m\n" << stream;
+    }
     gates[1] = 0;
 }
 
