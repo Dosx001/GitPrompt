@@ -2,7 +2,7 @@
 
 bool Git::start() {
     char stream[max];
-    return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r")) ? true : false;
+    return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r")) ? 1 : 0;
 }
 
 void Git::stash() {
@@ -12,7 +12,7 @@ void Git::stash() {
     int i = 0;
     while (fgets(stream, max, fp)) i++;
     if (0 < i) std::cout << "\033[35mStashes: " << i;
-    gates[0] = false;
+    gates[0] = 0;
     pclose(fp);
 }
 
@@ -21,7 +21,7 @@ void Git::log() {
     if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
         while (gates[0]);
         std::cout << "\033[90m\n" << stream;
-    gates[1] = false;
+    gates[1] = 0;
 }
 
 void Git::status() {
@@ -34,7 +34,7 @@ void Git::status() {
         color(stream);
         while (fgets(stream, max, fp)) color(stream);
     }
-    gates[2] = false;
+    gates[2] = 0;
     pclose(fp);
 }
 
@@ -48,7 +48,7 @@ void Git::merge() {
         print(stream, 14, '\'');
         std::cout << "\033[0;31m";
     }
-    gates[3] = false;
+    gates[3] = 0;
 }
 
 void Git::branch() {

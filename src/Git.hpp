@@ -3,7 +3,7 @@
 class Git {
     private:
         const int max = 128;
-        bool gates[4] = {true, true, true, true};
+        volatile bool gates[4] = {1, 1, 1, 1};
     public:
         bool start();
         void stash();
