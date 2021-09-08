@@ -1,53 +1,71 @@
 #include "Git.hpp"
 
 bool Git::start() {
+    char stream[max];
     return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r")) ? true : false;
 }
 
 void Git::stash() {
+    FILE* fp;
     fp = popen("git stash list", "r");
+    char stream[max];
     int i = 0;
     while (fgets(stream, max, fp)) i++;
     if (0 < i) std::cout << "\033[35mStashes: " << i;
+    gates[0] = false;
+    pclose(fp);
 }
 
 void Git::log() {
+    char stream[max];
     if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
+        while (gates[0]);
         std::cout << "\033[90m\n" << stream;
+    gates[1] = false;
 }
 
 void Git::status() {
+    FILE* fp;
     fp = popen("git status -s", "r");
+    char stream[max];
     if (fgets(stream, max, fp)) {
+        while (gates[1]);
         std::cout << "\n\033";
         color(stream);
         while (fgets(stream, max, fp)) color(stream);
     }
+    gates[2] = false;
+    pclose(fp);
 }
 
 void Git::merge() {
+    char stream[max];
     if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel`/.git/MERGE_MSG 2> /dev/null", "r"))) {
         char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
         for (int i = 0; i < 15; i += 3) if (stream[i] != check[i]) return;
+        while (gates[2]);
         std::cout << "\n\033[30;42mMerging\033[32;41m\033[30;41m";
         print(stream, 14, '\'');
         std::cout << "\033[0;31m";
     }
+    gates[3] = false;
 }
 
 void Git::branch() {
+    char stream[max];
     if (fgets(stream, max, popen("git branch --show-current", "r"))) {
+        while (gates[2] || gates[3]);
         std::cout << "\n\033[30;41m";
         print(stream, 0, '\n');
         std::cout << "\033[31;44m";
     }
     else {
+        while (gates[2] || gates[3]);
         fgets(stream, max, popen("git branch -l", "r"));
         std::cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
         print(stream, 23, ')');
         std::cout << "\033[31;44m";
     }
-    pclose(fp);
 }
 
 void Git::color(char* stream) {
