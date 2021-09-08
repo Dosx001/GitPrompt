@@ -32,8 +32,8 @@ void Git::status() {
     if (fgets(stream, max, fp)) {
         while (gates[1]);
         std::cout << "\n\033";
-        color(stream);
-        while (fgets(stream, max, fp)) color(stream);
+        do color(stream);
+        while (fgets(stream, max, fp));
     }
     gates[2] = 0;
     pclose(fp);
@@ -55,14 +55,14 @@ void Git::merge() {
 void Git::branch() {
     char stream[max];
     if (fgets(stream, max, popen("git branch --show-current", "r"))) {
-        while (gates[2] || gates[3]);
+        while (gates[3] || gates[2]);
         std::cout << "\n\033[30;41m";
         print(stream, 0, '\n');
         std::cout << "\033[31;44m";
     }
     else {
-        while (gates[2] || gates[3]);
         fgets(stream, max, popen("git branch -l", "r"));
+        while (gates[3] || gates[2]);
         std::cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
         print(stream, 23, ')');
         std::cout << "\033[31;44m";
@@ -150,12 +150,13 @@ void Git::color(char* stream) {
             }
     }
     print(stream, 3, '\n');
-    std::cout << "\033[00m ";
+    std::cout << "\033[0m ";
 }
 
 void Git::print(char* stream, int i, char a) {
-    while (stream[i] != a) {
+    do {
         std::cout << stream[i];
         i++;
     }
+    while (stream[i] != a);
 }
