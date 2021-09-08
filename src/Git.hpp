@@ -2,9 +2,8 @@
 
 class Git {
     private:
-        FILE* fp;
-        static const int max = 128;
-        char stream[max];
+        const int max = 128;
+        bool gates[4] = {true, true, true, true};
     public:
         bool start();
         void stash();
