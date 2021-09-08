@@ -1,5 +1,4 @@
 #include "Git.hpp"
-#include <thread>
 
 int main() {
     Git* it = new Git();
