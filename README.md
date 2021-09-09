@@ -1,4 +1,6 @@
 # GitPrompt
+I designed GitPrompt to work only on Linux. Keeps GitPrompt simple and fast. I'm assuming most developers are on Linux anyways if not come join the fun! :)
+
 Fun Fact: I started this project because I was too lazy to type git status.
 
 I originally wrote GitPrompt in Bash. These were literally the first lines of code I wrote.
@@ -16,28 +18,40 @@ gitStatus() {
     * [Normal](#normal)
     * [Merge Conflicts](#merge-conflicts)
 * [Examples](#examples)
-  * [Merge Conflict](#merge-conflict)
   * [Normal Usage](#normal-usage)
+  * [Merge Conflict](#merge-conflict)
 
 # Install
 ```bash
 git clone git@github.com:Dosx001/GitPrompt.git
 cd GitPrompt
-g++ -O3 Git.cpp -o Git; mv Git ~
+cmake CMakeLists.txt
+make
+cp bin/GitPrompt.exe ~
 vim ~/.bashrc
 ```
-Then put "\$(~/Git)" anywhere inside of PS1.
+Then put "\$(~/GitPrompt.exe)" anywhere inside of PS1.
 ```bash
-export PS1="\u@\h \$(~/Git)\[\e[00m\]\n\W\\$ "
+export PS1="\u@\h \$(~/GitPrompt.exe)\[\e[00m\]\n\W\\$ "
+```
+My personal bash prompt.
+```bash
+Date() {
+  echo -e "\e[33m`date '+%a %b %d, %Y'`"
+}
+export PS1="\[\e[92m\]\u@\h \$(Date) \$(~/GitPrompt.exe)\[\e[32;44m\]\W\[\e[0;34m\]\[\e[0m\]"
 ```
 ## Update
 ```bash
 cd GitPrompt
 git pull
-g++ -O3 Git.cpp -o Git; mv Git ~
+cmake CMakeLists.txt
+make
+cp bin/GitPrompt.exe ~
 ```
 
 ## Nerd Font
+You might see weird symbols like this one . Just install Nerd Font.
 ```bash
 git clone https://github.com/sgolovine/nerdfont-patcher.git
 cd nerdfont-patcher
@@ -79,7 +93,8 @@ Install your new font and change your terminal font to the new font.
 | Deleted File(Both) | ![](https://i.imgur.com/8gEo6RW.png) |
 
 # Examples
+## Normal Usage
+<img src="https://i.imgur.com/RknJSHG.gif"/>
+
 ## Merge Conflict
 ![](https://i.imgur.com/1fdC6Rz.png)
-## Normal Usage
-![](https://i.imgur.com/vx2bjOZ.png)
