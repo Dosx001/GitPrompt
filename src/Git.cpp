@@ -43,13 +43,13 @@ void Git::merge() {
     char stream[max];
     if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel`/.git/MERGE_MSG 2> /dev/null", "r"))) {
         char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
-        for (int i = 0; i < 15; i += 3) if (stream[i] != check[i]) return;
+        for (int i = 15; i -= 3;) if (stream[i] != check[i]) goto done;
         while (gates[2]);
         std::cout << "\n\033[30;42mMerging\033[32;41m\033[30;41m";
         print(stream, 14, '\'');
         std::cout << "\033[0;31m";
     }
-    gates[3] = 0;
+    done: gates[3] = 0;
 }
 
 void Git::branch() {
