@@ -2,7 +2,7 @@
 
 bool Git::start() {
     char stream[max];
-    return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r")) ? 1 : 0;
+    return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r"));
 }
 
 void Git::stash() {
@@ -59,14 +59,13 @@ void Git::branch() {
         std::cout << "\n\033[30;41m";
         print(stream, 0, '\n');
         std::cout << "\033[31;44m";
+        return;
     }
-    else {
-        fgets(stream, max, popen("git branch -l", "r"));
-        while (gates[3] || gates[2]);
-        std::cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
-        print(stream, 23, ')');
-        std::cout << "\033[31;44m";
-    }
+    fgets(stream, max, popen("git branch -l", "r"));
+    while (gates[3] || gates[2]);
+    std::cout << "\n\033[30;42mRebasing\033[0;32m\n\033[30;41m";
+    print(stream, 23, ')');
+    std::cout << "\033[31;44m";
 }
 
 void Git::color(char* stream) {

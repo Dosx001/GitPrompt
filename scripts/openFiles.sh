@@ -1,5 +1,5 @@
 #!/bin/bash
-vim -p src/Git.hpp src/pch.hpp src/Git.hpp\
+vim -p src/Git.hpp src/pch.hpp src/main.cpp \
     "+vs src/Git.cpp | tabn" \
     "+vs src/pch.cpp | tabn" \
-    "+vs src/main.cpp | tabmove 0"
+    "+tabmove 0"
