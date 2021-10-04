@@ -1,1 +1,4 @@
-#include "pch.cpp"
+#pragma once
+
+#include <iostream>
+#include <thread>
