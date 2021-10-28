@@ -7,7 +7,7 @@ bool Git::start() {
 
 void Git::stash() {
     FILE* fp;
-    fp = popen("git stash list", "r");
+    fp = popen("git stash list 2> /dev/null", "r");
     char stream[max];
     int i = 0;
     while (fgets(stream, max, fp)) i++;
@@ -27,7 +27,7 @@ void Git::log() {
 
 void Git::status() {
     FILE* fp;
-    fp = popen("git status -s", "r");
+    fp = popen("git status -s 2> /dev/null", "r");
     char stream[max];
     if (fgets(stream, max, fp)) {
         while (gates[1]);
@@ -41,7 +41,7 @@ void Git::status() {
 
 void Git::merge() {
     char stream[max];
-    if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel`/.git/MERGE_MSG 2> /dev/null", "r"))) {
+    if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel 2> /dev/null`/.git/MERGE_MSG 2> /dev/null", "r"))) {
         char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
         for (int i = 15; i -= 3;) if (stream[i] != check[i]) goto done;
         while (gates[2]);
