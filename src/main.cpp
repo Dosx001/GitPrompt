@@ -16,6 +16,5 @@ int main() {
         th4.join();
         th5.join();
     }
-    else std::cout << "\n\033";
     return 0;
 }
