@@ -5,24 +5,12 @@ bool Git::start() {
     return fgets(stream, max, popen("git rev-parse --git-dir 2> /dev/null", "r"));
 }
 
-void Git::stash() {
-    FILE* fp;
-    fp = popen("git stash list 2> /dev/null", "r");
-    char stream[max];
-    int i = 0;
-    while (fgets(stream, max, fp)) i++;
-    if (0 < i) std::cout << "\033[35mStashes: " << i;
-    gates[0] = 0;
-    pclose(fp);
-}
-
 void Git::log() {
     char stream[max];
     if (fgets(stream, max, popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r"))) {
-        while (gates[0]);
-        std::cout << "\033[90m\n" << stream;
-    } else while (gates[0]);
-    gates[1] = 0;
+        std::cout << "\033[90m" << stream;
+    }
+    gates[0] = 0;
 }
 
 void Git::status() {
@@ -30,13 +18,13 @@ void Git::status() {
     fp = popen("git status -s 2> /dev/null", "r");
     char stream[max];
     if (fgets(stream, max, fp)) {
-        while (gates[1]);
+        while (gates[0]);
         std::cout << "\n\033";
         do color(stream);
         while (fgets(stream, max, fp));
-    } else while (gates[1]);
+    } else while (gates[0]);
     std::cout << "\n\033[0m";
-    gates[2] = 0;
+    gates[1] = 0;
     pclose(fp);
 }
 
@@ -45,28 +33,42 @@ void Git::merge() {
     if (fgets(stream, max, popen("cat `git rev-parse --show-toplevel 2> /dev/null`/.git/MERGE_MSG 2> /dev/null", "r"))) {
         char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b', 'r', 'a', 'n', 'c', 'h', ' ', '\''};
         for (int i = 15; i -= 3;) if (stream[i] != check[i]) goto done;
-        while (gates[2]);
+        while (gates[1]);
         std::cout << "\033[30;41m ";
         print(stream, 14, '\'');
-        std::cout << "\033[42;31m\033[30;42m Merging onto\033[32;41m\033[30;41m";
-    } else done: while (gates[2]);
-    gates[3] = 0;
+        std::cout << " \033[42;31m\033[30;42m Merging onto \033[32;41m\033[30;41m";
+    } else done: while (gates[1]);
+    gates[2] = 0;
 }
 
 void Git::branch() {
     char stream[max];
     if (fgets(stream, max, popen("git branch --show-current", "r"))) {
-        while (gates[3]);
+        while (gates[2]);
         std::cout << "\033[30;41m ";
         print(stream, 0, '\n');
-        std::cout << "\033[0m\033[31m";
-        return;
+        std::cout << " \033[0m";
+        goto done;
     }
     fgets(stream, max, popen("git branch -l", "r"));
-    while (gates[3]);
-    std::cout << "\033[30;42m Rebasing\033[41;32m\033[30;41m ";
+    while (gates[2]);
+    std::cout << "\033[30;42m Rebasing \033[41;32m\033[30;41m ";
     print(stream, 23, ')');
-    std::cout << " \033[0m\033[31m";
+    std::cout << " \033[0m";
+    done: gates[3] = 0;
+}
+
+void Git::stash() {
+    FILE* fp;
+    fp = popen("git stash list 2> /dev/null", "r");
+    char stream[max];
+    int i = 0;
+    while (fgets(stream, max, fp)) i++;
+    while (gates[3]);
+    0 < i ?
+        std::cout << "\033[31;45m\033[30;45m Stashes: " << i << " \033[0m\033[35m\n" :
+        std::cout << "\033[31m\n";
+    pclose(fp);
 }
 
 void Git::color(char* stream) {

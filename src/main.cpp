@@ -5,11 +5,11 @@ int main() {
     std::cin.tie(NULL);
     Git* it = new Git();
     if (it -> start()) {
-        std::thread th1(&Git::stash, it);
-        std::thread th2(&Git::log, it);
-        std::thread th3(&Git::status, it);
-        std::thread th4(&Git::merge, it);
-        std::thread th5(&Git::branch, it);
+        std::thread th1(&Git::log, it);
+        std::thread th2(&Git::status, it);
+        std::thread th3(&Git::merge, it);
+        std::thread th4(&Git::branch, it);
+        std::thread th5(&Git::stash, it);
         th1.join();
         th2.join();
         th3.join();
