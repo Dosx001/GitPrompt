@@ -22,7 +22,10 @@ gitStatus() {
   * [Merge Conflicts](#merge-conflicts)
 * [Install](#install)
   * [Nerd Font](#nerd-font)
-  * [Update](#update)
+* [Setup](#setup)
+  * [Bash](#bash)
+  * [Zsh](#zsh)
+* [Update](#update)
 
 # Examples
 ## Normal Usage
@@ -69,18 +72,6 @@ cd GitPrompt
 cmake CMakeLists.txt
 make
 cp bin/GitPrompt.exe ~
-vim ~/.bashrc
-```
-Then put "\$(~/GitPrompt.exe)" anywhere inside of PS1.
-```bash
-export PS1="\u@\h \$(~/GitPrompt.exe)\[\e[00m\]\n\W\\$ "
-```
-My personal bash prompt.
-```bash
-Date() {
-  echo -e "\e[33m`date '+%a %b %d, %Y'`"
-}
-export PS1="\[\e[92m\]\u@\h \$(Date) \$(~/GitPrompt.exe)\[\e[32;44m\]\W\[\e[0;34m\]\[\e[0m\]"
 ```
 
 ## Nerd Font
@@ -96,7 +87,44 @@ fontforge -script font-patcher /PATH/TO/YOUR/FAVORITE/FONT/FontName.ttf -c
 ```
 Install your new font and change your terminal font to the new font.
 
-## Update
+# Setup
+## Bash
+Just put "\$(~/GitPrompt.exe)" anywhere inside of PS1.
+```bash
+export PS1="\u@\h \$(~/GitPrompt.exe)\[\e[00m\]\n\W\\$ "
+```
+My personal bash prompt.
+```bash
+export PS1="\[\e[92m\]\u@\h \$(~/GitPrompt.exe)\n\[\e[32;44m\] \W \[\e[0;34m\]\[\e[0m\]"
+```
+## Zsh
+Just add these lines inside your .zshrc and you're set.
+```zsh
+_prompt() {
+    ~/GitPrompt.exe
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook precmd _prompt
+```
+My personal zsh prompt.
+```zsh
+_prompt() {
+    if [[ -e `git rev-parse --git-dir 2> /dev/null` ]]; then
+        echo -n "$fg[green]`whoami`@`cat /proc/sys/kernel/hostname` "
+    else
+        echo "$fg[green]`whoami`@`cat /proc/sys/kernel/hostname`"
+    fi
+    ~/GitPrompt.exe
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook precmd _prompt
+
+autoload -U colors && colors
+PROMPT="%{$fg[green]$bg[blue]%} %1d %{$reset_color%}%{$fg[blue]%}%{$reset_color%}"
+```
+# Update
 ```bash
 cd GitPrompt
 git pull
