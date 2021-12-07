@@ -1,22 +1,19 @@
 # GitPrompt
+GitPrompt is multi-threaded C++ program design to display all relevant Git information inside
+your shell prompt, such as Git status.
+
 I designed GitPrompt to work only on Linux. Keeps GitPrompt simple and fast.
 I'm assuming most developers are working on Linux if not come join the fun!
 But if there is enough demand I could make a Windows or Mac version.
 
-Fun Fact: I started this project because I was too lazy to type git status.
-
-I originally wrote GitPrompt in Bash. These were literally the first lines of code I wrote.
-```bash
-gitStatus() {
-  echo -e "\e[31m$(git status --short 2> /dev/null | sed ':a;N;$!ba;s/\n/ /g')"
-}
-```
-
 # Table of Contents
-* [Examples](#examples)
-  * [Normal Usage](#normal-usage)
-  * [Merge Conflict](#merge-conflict)
 * [What does GitPrompt do?](#what-does-gitprompt-do)
+  * [Git Status](#git-status)
+  * [Latest Git Commit Log](#latest-git-commit-log)
+  * [Git Branch](#git-branch)
+  * [Git Stash](#git-stash)
+  * [Git Rebase](#git-rebase)
+  * [Git Merge](#git-merge)
 * [Git Status Color Codes ](#git-status-color-codes)
   * [Normal](#normal)
   * [Merge Conflicts](#merge-conflicts)
@@ -27,18 +24,32 @@ gitStatus() {
   * [Zsh](#zsh)
 * [Update](#update)
 
-# Examples
-## Normal Usage
+# What does GitPrompt do?
+### Git Status
+Prints and color codes every file inside the shell prompt. To see all 20 different color codes
+checkout [Git Status Color Codes ](#git-status-color-codes)
+
 <img src="https://i.imgur.com/RknJSHG.gif"/>
 
-## Merge Conflict
-![](https://i.imgur.com/Jftkd9u.png)
-
-# What does GitPrompt do?
-![](https://i.imgur.com/ZLmBlag.png)
+### Latest Git Commit Log
+Shows the latest commit log of the current branch in gray text.
+![Imgur](https://i.imgur.com/enJSUcS.png?1)
+### Git Branch
+Shows the current git branch in the red background.
+![Imgur](https://i.imgur.com/glzEExD.png?1)
+### Git Stash
+Shows the number of git stashes in the purple background. Note if the number of stashes is
+zero then this section will not print.
+![Imgur](https://i.imgur.com/yrXAKQ5.png?1)
+### Git Rebase
+Shows if your currently rebasing in the green background.
+![Imgur](https://i.imgur.com/iXBC1bi.png?1)
+### Git Merge
+Shows if your are currently merging and with which branch.
+![Imgur](https://i.imgur.com/85wA8ni.png?1)
 
 # Git Status Color Codes
-## Normal
+### Normal
 | Status | Color |
 |---|---|
 | Untracked File | ![](https://i.imgur.com/AQgcrQ4.png)
@@ -54,7 +65,7 @@ gitStatus() {
 | Rename File | ![](https://i.imgur.com/eX1msRP.png) |
 | Modified Rename File | ![](https://i.imgur.com/dWyPvjn.png) |
 | Deleted Rename File | ![](https://i.imgur.com/gnzkKJI.png) |
-## Merge Conflicts
+### Merge Conflicts
 | Status | Color |
 |---|---|
 | Modified File | ![](https://i.imgur.com/kMg9ny9.png) |
@@ -88,7 +99,7 @@ fontforge -script font-patcher /PATH/TO/YOUR/FAVORITE/FONT/FontName.ttf -c
 Install your new font and change your terminal font to the new font.
 
 # Setup
-## Bash
+### Bash
 Just put "\$(~/GitPrompt.exe)" anywhere inside of PS1.
 ```bash
 export PS1="\u@\h \$(~/GitPrompt.exe)\[\e[00m\]\n\W\\$ "
@@ -97,7 +108,7 @@ My personal bash prompt.
 ```bash
 export PS1="\[\e[92m\]\u@\h \$(~/GitPrompt.exe)\n\[\e[32;44m\] \W \[\e[0;34m\]\[\e[0m\]"
 ```
-## Zsh
+### Zsh
 Just add these lines inside your .zshrc and you're set.
 ```zsh
 _prompt() {
