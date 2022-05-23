@@ -21,7 +21,7 @@ void Git::status() {
   if (fgets(stream, max, fp)) {
     while (gates[0])
       ;
-    std::cout << "\n\033";
+    std::cout << "\n\033[0m";
     do
       color(stream);
     while (fgets(stream, max, fp));
