@@ -1,6 +1,6 @@
 *.a
-*.exe
 *.cmake
 Makefile
 CMakeCache.txt
 CMakeFiles/
+bin/
