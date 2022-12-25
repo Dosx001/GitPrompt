@@ -19,12 +19,13 @@ But if there is enough demand I could make a Windows or Mac version.
 - [Git Status Color Codes](#git-status-color-codes)
   - [Normal](#normal)
   - [Merge Conflicts](#merge-conflicts)
-- [Install](#install)
+- [Installation](#installation)
+  - [From Source](#from-source)
+  - [Arch Linux](#arch-linux)
   - [Nerd Font](#nerd-font)
 - [Setup](#setup)
   - [Bash](#bash)
   - [Zsh](#zsh)
-- [Update](#update)
 
 ## What does GitPrompt do?
 
@@ -93,14 +94,26 @@ Shows if your are currently merging and with which branch.
 | Deleted File(Them) | ![git](https://i.imgur.com/7gojtXH.png) |
 | Deleted File(Both) | ![git](https://i.imgur.com/8gEo6RW.png) |
 
-## Install
+## Installation
+
+### From Source
 
 ```bash
 git clone git@github.com:Dosx001/GitPrompt.git
 cd GitPrompt
 cmake CMakeLists.txt
 make
-cp bin/GitPrompt.exe ~
+sudo ln -s /PATH/TO/DIR/GitPrompt/bin/gitprompt /usr/bin/git-prompt
+```
+
+### Arch Linux
+
+```bash
+paru -S git-prompt
+```
+
+```bash
+yay -S git-prompt
 ```
 
 ### Nerd Font
@@ -123,16 +136,16 @@ Install your new font and change your terminal font to the new font.
 
 ### Bash
 
-Just put "\$(~/GitPrompt.exe)" anywhere inside of PS1.
+Just put "\$(git-prompt)" anywhere inside of PS1.
 
 ```bash
-export PS1="\u@\h \$(~/GitPrompt.exe)\[\e[00m\]\n\W\\$ "
+export PS1="\u@\h \$(git-prompt)\[\e[00m\]\n\W\\$ "
 ```
 
 My personal bash prompt.
 
 ```bash
-export PS1="\[\e[92m\]\u@\h \$(~/GitPrompt.exe)\n\[\e[32;44m\] \W \[\e[0;34m\]\[\e[0m\]"
+export PS1="\[\e[92m\]\u@\h \$(git-prompt)\n\[\e[32;44m\] \W \[\e[0;34m\]\[\e[0m\]"
 ```
 
 ### Zsh
@@ -141,7 +154,7 @@ Just add these lines inside your .zshrc and you're set.
 
 ```zsh
 _prompt() {
-    ~/GitPrompt.exe
+    git-prompt
 }
 
 autoload -U add-zsh-hook
@@ -157,7 +170,7 @@ _prompt() {
     else
         echo "$fg[green]`whoami`@`cat /proc/sys/kernel/hostname`"
     fi
-    ~/GitPrompt.exe
+    git-prompt
 }
 
 autoload -U add-zsh-hook
@@ -165,14 +178,4 @@ add-zsh-hook precmd _prompt
 
 autoload -U colors && colors
 PROMPT="%{$fg[green]$bg[blue]%} %1d %{$reset_color%}%{$fg[blue]%}%{$reset_color%}"
-```
-
-## Update
-
-```bash
-cd GitPrompt
-git pull
-cmake CMakeLists.txt
-make
-cp bin/GitPrompt.exe ~
 ```
