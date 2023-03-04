@@ -8,9 +8,8 @@ bool Git::start() {
 void Git::log() {
   char stream[max];
   if (fgets(stream, max,
-            popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r"))) {
+            popen("git log -1 --pretty=format:'%s' 2> /dev/null", "r")))
     std::cout << "\033[90m" << stream;
-  }
   gates[0] = 0;
 }
 
@@ -39,8 +38,8 @@ void Git::merge() {
             popen("cat `git rev-parse --show-toplevel 2> "
                   "/dev/null`/.git/MERGE_MSG 2> /dev/null",
                   "r"))) {
-    char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b',
-                      'r', 'a', 'n', 'c', 'h', ' ', '\''};
+    const char check[14] = {'M', 'e', 'r', 'g', 'e', ' ', 'b',
+                            'r', 'a', 'n', 'c', 'h', ' ', '\''};
     for (int i = 15; i -= 3;)
       if (stream[i] != check[i])
         goto done;
@@ -177,9 +176,8 @@ void Git::color(char *stream) {
   std::cout << "\033[0m ";
 }
 
-void Git::print(char *stream, int i, char a) {
-  do {
+void Git::print(const char *stream, int i, char a) {
+  do
     std::cout << stream[i];
-    i++;
-  } while (stream[i] != a);
+  while (stream[++i] != a);
 }

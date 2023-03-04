@@ -15,5 +15,5 @@ public:
 
 private:
   void color(char *stream);
-  void print(char *stream, int i, char a);
+  void print(const char *stream, int i, char a);
 };
