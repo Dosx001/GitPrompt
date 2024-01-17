@@ -83,18 +83,15 @@ done:
 }
 
 void Git::stash() {
-  FILE *fp;
-  fp = popen("git stash list 2> /dev/null", "r");
   char stream[max];
   int i = 0;
-  while (fgets(stream, max, fp))
+  while (fgets(stream, max, popen("git stash list 2> /dev/null", "r")))
     i++;
   while (gates[3])
     ;
   0 < i ? std::cout << "\033[31;45m\033[30;45m Stashes: " << i
                     << " \033[0m\033[35m\n"
         : std::cout << "\033[31m\n";
-  pclose(fp);
 }
 
 void Git::color(char *stream) {
