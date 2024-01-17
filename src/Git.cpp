@@ -70,8 +70,13 @@ void Git::branch() {
   fgets(stream, max, popen("git branch -l", "r"));
   while (gates[2])
     ;
-  std::cout << "\033[30;42m Rebasing \033[41;32m\033[30;41m ";
-  print(stream, 23, ')');
+  if (stream[22] == ' ') {
+    std::cout << "\033[30;42m Rebasing \033[41;32m\033[30;41m ";
+    print(stream, 23, ')');
+  } else {
+    std::cout << "\033[30;41m ";
+    print(stream, 20, ')');
+  }
   std::cout << " \033[0m";
 done:
   gates[3] = 0;
